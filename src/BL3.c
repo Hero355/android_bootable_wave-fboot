@@ -94,8 +94,15 @@ int is_key_pressed(int col, int row)
 
 runMode_t checkFBOOT( void )
 {
+    if(is_key_pressed(1, 2) && is_key_pressed(0,0)) //VOLUP KEY + HOME KEY
+        return rm_FOTA_RECOSECOND; // start in Recovery Mode
+
     if(is_key_pressed(1, 2)) //VOLUP KEY
         return rm_FOTA_RECOVERY; // start in Recovery Mode
+
+    if(is_key_pressed(0, 0)) //HOME KEY
+        return rm_FOTA_SECOND; // start in Recovery Mode
+
 
     if(is_key_pressed(2, 0)) //CALL KEY
         return rm_BL3; // we can use it for Bada offline chanrger

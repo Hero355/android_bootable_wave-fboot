@@ -25,7 +25,7 @@
 
 int main(runMode_t mode)
 {
-   void* kernelImage = L"/e/boot.img"; // g - internal sd card, e - external sd card
+   void* kernelImage = L""; // g - internal sd card, e - external sd card
    char* cmdlnRM = "bootmode=2 loglevel=4";
    char* cmdln = "loglevel=4";
 
@@ -39,8 +39,10 @@ int main(runMode_t mode)
 
    int mmuctrl = MemMMUCacheEnable(gMMUL1PageTable, 1);
 
-   //disp_FOTA_Init();    - white screen
-   disp_Normal_Init();//  - black screen
+   if (mode == rm_FOTA_RECOSECOND || mode == rm_FOTA_SECOND)
+       disp_FOTA_Init();//    - white screen if secondary boot
+    else
+       disp_Normal_Init();//  - black screen else
    disp_FOTA_Printf("                              ");
    disp_FOTA_Printf("                              ");
    disp_FOTA_Printf("       XDA DEVELOPERS         ");
@@ -61,6 +63,16 @@ int main(runMode_t mode)
    __PfsMassInit();
    MemoryCardMount();
    disp_FOTA_Printf("     Mounted partitions       ");
+
+   if(mode == rm_FOTA_RUN)
+     kernelImage = L"/e/boot.img"; //great renamed and work
+   if(mode == rm_FOTA_RECOVERY)
+     kernelImage = L"/e/boot.img";  //great //
+   if(mode == rm_FOTA_SECOND)
+     kernelImage = L"/e/boot_2.img";  //great //
+   if(mode == rm_FOTA_RECOSECOND)
+     kernelImage = L"/e/boot_2.img"; //futur test need key combo work
+
 
    tfs4_stat(kernelImage, &filestat);
    kernelSize = filestat.st_size;
@@ -85,6 +97,18 @@ int main(runMode_t mode)
          setup_cmdline_tag(cmdlnRM);
          disp_FOTA_Printf("                             ");
          disp_FOTA_Printf("     Boot in Recovery Mode   ");
+      }
+      else if (mode == rm_FOTA_RECOSECOND)
+      {
+         setup_cmdline_tag(cmdlnRM);
+         disp_FOTA_Printf("                             ");
+         disp_FOTA_Printf("    Boot 2 in Recovery Mode  ");
+      }
+      else if (mode == rm_FOTA_SECOND)
+       {
+         setup_cmdline_tag(cmdln);
+         disp_FOTA_Printf("                             ");
+         disp_FOTA_Printf("     Boot 2 in Normal Mode   ");
       }
       else
       {

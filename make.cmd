@@ -16,4 +16,3 @@ if not exist %output% (
 :MAKE
 ARM\bin\cs-make.exe %1 %2 %3 %4
 echo:
-pause

@@ -12,6 +12,8 @@ typedef enum
    rm_BL3,
    rm_FOTA_RUN,
    rm_FOTA_RECOVERY,
+   rm_FOTA_SECOND,
+   rm_FOTA_RECOSECOND,
    rm_FOTA_DLOAD,
 
 } runMode_t;
