@@ -1,4 +1,5 @@
 First kernel : boot.img on SDcard
+
 Second kernel : boot_2.img on SDcard
 
 
