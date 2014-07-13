@@ -65,13 +65,13 @@ int main(runMode_t mode)
    disp_FOTA_Printf("     Mounted partitions       ");
 
    if(mode == rm_FOTA_RUN)
-     kernelImage = L"/e/boot.img"; //great renamed and work
+     kernelImage = L"/e/boot.img";
    if(mode == rm_FOTA_RECOVERY)
-     kernelImage = L"/e/boot.img";  //great //
+     kernelImage = L"/e/boot.img";
    if(mode == rm_FOTA_SECOND)
-     kernelImage = L"/e/boot_2.img";  //great //
+     kernelImage = L"/e/boot_2.img";
    if(mode == rm_FOTA_RECOSECOND)
-     kernelImage = L"/e/boot_2.img"; //futur test need key combo work
+     kernelImage = L"/e/boot_2.img";
 
 
    tfs4_stat(kernelImage, &filestat);
