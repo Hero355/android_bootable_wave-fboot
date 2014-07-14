@@ -14,7 +14,7 @@ RM := $(ARMTK)/bin/rm.exe
 OBJCOPY := $(ARM)/bin/arm-bada-eabi-objcopy.exe
 
 #Build only for Wave I (bada 2.0)
-Applications := FBOOT_S8530_b2x 
+Applications := FBOOT_S8530_b2x FBOOT_S8500_b2x
 OutputFiles := $(patsubst %, $(OutDir)/%.fota, $(Applications))
 
 application: $(OutputFiles)

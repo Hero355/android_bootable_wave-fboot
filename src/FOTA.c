@@ -25,7 +25,7 @@
 
 int main(runMode_t mode)
 {
-   if (mode == rm_FOTA_INTERACTIVE){
+   if (mode==rm_FOTA_INTERACTIVE){
    void* kernelImage = L""; // g - internal sd card, e - external sd card
    char* cmdlnRM = "bootmode=2 loglevel=4";
    char* cmdln = "loglevel=4";
@@ -40,66 +40,150 @@ int main(runMode_t mode)
 
    int mmuctrl = MemMMUCacheEnable(gMMUL1PageTable, 1);
 
-   /*if (mode == rm_FOTA_RECOSECOND || mode == rm_FOTA_SECOND)
-       disp_FOTA_Init();//    - white screen if secondary boot
-    else
-       disp_Normal_Init();//  - black screen else*/
-   /*disp_FOTA_Printf("                              ");
-   disp_FOTA_Printf("                              ");
-   disp_FOTA_Printf("       XDA DEVELOPERS         ");
-   disp_FOTA_Printf("                              ");
-   disp_FOTA_Printf("                              ");
-   disp_FOTA_Printf(" __      __                   ");
-   disp_FOTA_Printf("/  \\    /  \\____ ___  __ ____ ");
-   disp_FOTA_Printf("\\   \\__/   |__  \\\\  \\/ // __ \\");
-   disp_FOTA_Printf(" \\        / / __ \\\\   / \\ ___/");
-   disp_FOTA_Printf("  \\__/\\__/ (_____/ \\_/   \\___");
-   disp_FOTA_Printf("                              ");
-   disp_FOTA_Printf("   ,(   ,(   ,(   ,(   ,(  ,( ");
-   disp_FOTA_Printf(" `-   `-   `-   `-   `-   `-  ");
-   disp_FOTA_Printf("                              ");
-   disp_FOTA_Printf("                              ");*/
-   disp_Normal_Init();
+   disp_FOTA_Init();
+   __PfsNandInit();
+   __PfsMassInit();
+   MemoryCardMount();
 
-    __PfsNandInit();
-    __PfsMassInit();
-    MemoryCardMount();
-    disp_FOTA_Printf("  Welcome to Fota Bootloader  ");
-    disp_FOTA_Printf("                              ");
-    disp_FOTA_Printf("     Mounted partitions       ");
-    disp_FOTA_Printf("                              ");
-    disp_FOTA_Printf("  Vol up : kernel 1, down : 2 ");
-    disp_FOTA_Printf("                              ");
+//DISPLAYFUNCTIONS
+    char entry1[30];
+    char entry2[30];
+    char entry3[30];
+    char title[30];
+    void RefreshScreen(){
+        int i;
+        for (i=0;i<255-24;i++){
+            disp_FOTA_Printf(" ");
+            }
+            disp_FOTA_Init();
+    }
+    void drawEntry(int entry,char entry1[30],char entry2[30],char entry3[30],char title[30]){
+        int i;
+        switch(entry)
+        {
+            case 0:
+            disp_FOTA_Printf("                              ");
+            disp_FOTA_Printf(title);
+            for(i=1;i<4;i++){disp_FOTA_Printf("                              ");}
+            disp_FOTA_Printf("*----------------------------*");
+            disp_FOTA_Printf(entry1);
+            disp_FOTA_Printf("*----------------------------*");
+            for(i=7;i<12;i++){disp_FOTA_Printf("                              ");}
+            disp_FOTA_Printf(entry2);
+            for(i=13;i<19;i++){disp_FOTA_Printf("                              ");}
+            disp_FOTA_Printf(entry3);
+            for(i=20;i<24;i++){disp_FOTA_Printf("                              ");}
+                break;
+            case 1:
+            disp_FOTA_Printf("                              ");
+            disp_FOTA_Printf(title);
+            for(i=1;i<5;i++){disp_FOTA_Printf("                              ");}
+            disp_FOTA_Printf(entry1);
+            for(i=6;i<11;i++){disp_FOTA_Printf("                              ");}
+            disp_FOTA_Printf("*----------------------------*");
+            disp_FOTA_Printf(entry2);
+            disp_FOTA_Printf("*----------------------------*");
+            for(i=14;i<19;i++){disp_FOTA_Printf("                              ");}
+            disp_FOTA_Printf(entry3);
+            for(i=20;i<24;i++){disp_FOTA_Printf("                              ");}
+                break;
+            case 2:
+            disp_FOTA_Printf("                              ");
+            disp_FOTA_Printf(title);
+            for(i=1;i<5;i++){disp_FOTA_Printf("                              ");}
+            disp_FOTA_Printf(entry1);
+            for(i=6;i<12;i++){disp_FOTA_Printf("                              ");}
+            disp_FOTA_Printf(entry2);
+            for(i=13;i<18;i++){disp_FOTA_Printf("                              ");}
+            disp_FOTA_Printf("*----------------------------*");
+            disp_FOTA_Printf(entry3);
+            disp_FOTA_Printf("*----------------------------*");
+            for(i=21;i<24;i++){disp_FOTA_Printf("                              ");}
+                break;
+        }
+        }
 
-   int pass=0;
-   while(pass==0)
-   {
-       if(is_key_pressed(1,2)){
-        kernelImage = L"/e/boot.img";
-        disp_FOTA_Printf("      Booting  kernel 1      ");
-        pass=1;
-       }
-       if(is_key_pressed(1,1)){
+
+//DISPLAYMENU
+int countStop=0;
+menu1:
+kernelImage = L"/e/boot.img";
+int currentMenu=0;
+int pass=0;
+int count=0;
+int bootMode=0;
+disp_FOTA_Init;
+//Tests
+    strcpy(entry1,"     Boot Android Kernel 1    ");
+    strcpy(entry2,"     Boot Android Kernel 2    ");
+    strcpy(entry3,"          Boot Bada           ");
+    strcpy(title,"  Welcome to Fota Bootloader  ");
+    drawEntry(currentMenu,entry1,entry2,entry3,title);
+    while(pass==0&&count<500000){
+
+    if(is_key_pressed(1,1)){
+        currentMenu=currentMenu+1;
+        if (currentMenu>2){currentMenu=0;};
+        countStop=1;
+        RefreshScreen();
+        drawEntry(currentMenu,entry1,entry2,entry3,title);}
+       while(is_key_pressed(1,1)){}
+     if(is_key_pressed(1,2)){
+         countStop=1;
+        currentMenu=currentMenu-1;
+        if (currentMenu<0){currentMenu=2;};
+
+        RefreshScreen();
+        drawEntry(currentMenu,entry1,entry2,entry3,title);}
+       while(is_key_pressed(1,2)){}
+    if(is_key_pressed(0,0)){
+        pass=1;}
+        if(countStop==0){count=count+1;}
+}
+    RefreshScreen();
+    if(pass==1)//Display second menu
+    {
+        pass=0;
+    if(currentMenu==2){return rm_BL3;}
+    else if(currentMenu==1){
+        strcpy(title,"  Booting kernel 2 in mode ?  ");
         kernelImage = L"/e/boot_2.img";
-        disp_FOTA_Printf("      Booting  kernel 2      ");
-        pass=1;
-       }
-   }
+}
+    else{
+        strcpy(title,"  Booting kernel 1 in mode ?  ");}
 
-    disp_FOTA_Printf("                              ");
+    strcpy(entry1,"      Boot in normal mode     ");
+    strcpy(entry2,"      Boot Recovery mode      ");
+    strcpy(entry3,"           Go Back            ");
 
-  /* if(mode == rm_FOTA_RUN)
-     kernelImage = L"/e/boot.img";
-   if(mode == rm_FOTA_RECOVERY)
-     kernelImage = L"/e/boot.img";
-   if(mode == rm_FOTA_SECOND)
-     kernelImage = L"/e/boot_2.img";
-   if(mode == rm_FOTA_RECOSECOND)
-     kernelImage = L"/e/boot_2.img";
-*/
+    drawEntry(currentMenu,entry1,entry2,entry3,title);
+    while(pass==0){
 
+    if(is_key_pressed(1,1)){
+        currentMenu=currentMenu+1;
+        if (currentMenu>2){currentMenu=0;};
+        RefreshScreen();
+        drawEntry(currentMenu,entry1,entry2,entry3,title);}
+       while(is_key_pressed(1,1)){}
+     if(is_key_pressed(1,2)){
+        currentMenu=currentMenu-1;
+        if (currentMenu<0){currentMenu=2;};
+        RefreshScreen();
+        drawEntry(currentMenu,entry1,entry2,entry3,title);}
+       while(is_key_pressed(1,2)){}
+    if(is_key_pressed(0,0)){
+        RefreshScreen();
+        pass=1;}
+
+}
+if(currentMenu==0){bootMode=0;}
+else if(currentMenu==1){bootMode=1;}
+else{goto menu1;}
+
+}
    tfs4_stat(kernelImage, &filestat);
    kernelSize = filestat.st_size;
+
 
    if ((kernelSize > 0) && ((fd=tfs4_open(kernelImage, 4)) >= 0))
    {
@@ -108,6 +192,7 @@ int main(runMode_t mode)
 
       DisableMmuCache(mmuctrl);
       _CoDisableMmu();
+      disp_FOTA_Printf("       Booting Modem       ");
 
       DRV_Modem_BootingStart();
       disp_FOTA_Printf("                             ");
@@ -142,33 +227,8 @@ int main(runMode_t mode)
       }*/
 
 
-
-    disp_FOTA_Printf("  Vol up : Normal, down : Rec ");
-    disp_FOTA_Printf("                              ");
-
-
-
-    disp_FOTA_Printf("                              ");
-
-
-pass=0;
-while(pass == 0)
-   {
-       if(is_key_pressed(1,2)){
-           pass = 1;
-        setup_cmdline_tag(cmdln);
-        disp_FOTA_Printf("      Booting  Normal        ");
-       }
-       if(is_key_pressed(1,1)){
-        pass=1;
-        setup_cmdline_tag(cmdlnRM);
-        disp_FOTA_Printf("      Booting  Recovery      ");
-       }
-   }
-
-
-
-
+    if(bootMode==0){setup_cmdline_tag(cmdln);}
+    else{setup_cmdline_tag(cmdlnRM);}
 
       setup_end_tag();
 
