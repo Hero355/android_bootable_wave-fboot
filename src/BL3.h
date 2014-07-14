@@ -52,6 +52,7 @@ enum {
    i_MemoryCardMount,
    i_DRV_Modem_BootingStart,
    i_disp_Normal_Init,
+   i_disp_First_Image,
 
    //do not add below this line
    i_endMarker
@@ -82,6 +83,7 @@ extern unsigned char* RAW_BL3;
 #define MemoryCardMount             ptr_table[i_MemoryCardMount]
 #define DRV_Modem_BootingStart      ptr_table[i_DRV_Modem_BootingStart]
 #define disp_Normal_Init            ptr_table[i_disp_Normal_Init]
+#define disp_First_Image            ptr_table[i_disp_First_Image]
 
 #define KEY_CALL 2
 #define KEY_CAM1 3

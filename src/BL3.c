@@ -79,7 +79,16 @@ int getBL3ptrs( void )
          return 1;
    }
    return 0;
+//COL 0 + ROW 0 = HOME KEY
+//COL 0 + ROW 1 = CAM HALF KEY
+//COL 0 + ROW 2 = CAM FULL KEY
+//COL 1 + ROW 1 = VOLDOWN KEY
+//COL 1 + ROW 2 = VOLUP KEY
+//COL 2 + ROW 0 = CALL KEY
+//COL 2 + ROW 2 = SLEEP KEY
+
 }
+
 
 int is_key_pressed(int col, int row)
 {

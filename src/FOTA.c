@@ -59,7 +59,7 @@ int main(runMode_t mode)
    disp_FOTA_Printf(" `-   `-   `-   `-   `-   `-  ");
    disp_FOTA_Printf("                              ");
    disp_FOTA_Printf("                              ");*/
-   disp_FOTA_Init();
+   disp_Normal_Init();
 
     __PfsNandInit();
     __PfsMassInit();
@@ -220,10 +220,10 @@ while(pass == 0)
    int mmuctrl = MemMMUCacheEnable(gMMUL1PageTable, 1);
 
    if (mode == rm_FOTA_RECOSECOND || mode == rm_FOTA_SECOND)
-       disp_FOTA_Init();//    - white screen if secondary boot
+     disp_First_Image();//    - white screen if secondary boot
     else
-       disp_Normal_Init();//  - black screen else
-   disp_FOTA_Printf("                              ");
+       disp_First_Image();//  - black screen else
+   /*disp_FOTA_Printf("                              ");
    disp_FOTA_Printf("                              ");
    disp_FOTA_Printf("       XDA DEVELOPERS         ");
    disp_FOTA_Printf("                              ");
@@ -238,11 +238,11 @@ while(pass == 0)
    disp_FOTA_Printf(" `-   `-   `-   `-   `-   `-  ");
    disp_FOTA_Printf("                              ");
    disp_FOTA_Printf("                              ");
-
+*/
    __PfsNandInit();
    __PfsMassInit();
    MemoryCardMount();
-   disp_FOTA_Printf("     Mounted partitions       ");
+  // disp_FOTA_Printf("     Mounted partitions       ");
 
    if(mode == rm_FOTA_RUN)
      kernelImage = L"/e/boot.img";
@@ -266,8 +266,8 @@ while(pass == 0)
       _CoDisableMmu();
 
       DRV_Modem_BootingStart();
-      disp_FOTA_Printf("                             ");
-      disp_FOTA_Printf("        Init Modem           ");
+    //  disp_FOTA_Printf("                             ");
+      //disp_FOTA_Printf("        Init Modem           ");
 
       setup_core_tag(ATAG_buf);
       setup_serial_tag(0x123, 0x456);
@@ -275,35 +275,35 @@ while(pass == 0)
       if (mode == rm_FOTA_RECOVERY)
       {
          setup_cmdline_tag(cmdlnRM);
-         disp_FOTA_Printf("                             ");
-         disp_FOTA_Printf("     Boot in Recovery Mode   ");
+        // disp_FOTA_Printf("                             ");
+         //disp_FOTA_Printf("     Boot in Recovery Mode   ");
       }
       else if (mode == rm_FOTA_RECOSECOND)
       {
          setup_cmdline_tag(cmdlnRM);
-         disp_FOTA_Printf("                             ");
-         disp_FOTA_Printf("    Boot 2 in Recovery Mode  ");
+        // disp_FOTA_Printf("                             ");
+         //disp_FOTA_Printf("    Boot 2 in Recovery Mode  ");
       }
       else if (mode == rm_FOTA_SECOND)
        {
          setup_cmdline_tag(cmdln);
-         disp_FOTA_Printf("                             ");
-         disp_FOTA_Printf("     Boot 2 in Normal Mode   ");
+         //disp_FOTA_Printf("                             ");
+         //disp_FOTA_Printf("     Boot 2 in Normal Mode   ");
       }
       else
       {
          setup_cmdline_tag(cmdln);
-         disp_FOTA_Printf("                             ");
-         disp_FOTA_Printf("      Boot in Normal Mode    ");
+         //disp_FOTA_Printf("                             ");
+         //disp_FOTA_Printf("      Boot in Normal Mode    ");
       }
       setup_end_tag();
 
       //copy kernel to the right position
       memcpy(&KERNEL_START, &KERNEL_BUF, kernelSize);
-      disp_FOTA_Printf("                             ");
+      /*disp_FOTA_Printf("                             ");
       disp_FOTA_Printf("    Copied kernel to boot     ");
       disp_FOTA_Printf("            Wait!             ");
-
+*/
       //SYSCON operations
       *((unsigned int*)SYSCON_NORMAL_CFG) = 0xFFFFFFFF;
       _CoDisableDCache();
