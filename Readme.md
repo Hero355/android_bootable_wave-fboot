@@ -14,3 +14,6 @@ Boot recovery 2nd kernel : vol up + home
 
 
 Boot bada : call
+
+
+Boot Interactive mode : call + vol up

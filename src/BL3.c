@@ -94,6 +94,8 @@ int is_key_pressed(int col, int row)
 
 runMode_t checkFBOOT( void )
 {
+    if(is_key_pressed(1, 2) && is_key_pressed(2,0)) //VOLUP KEY + HOME KEY
+        return rm_FOTA_INTERACTIVE; // start in Recovery Mode
     if(is_key_pressed(1, 2) && is_key_pressed(0,0)) //VOLUP KEY + HOME KEY
         return rm_FOTA_RECOSECOND; // start in Recovery Mode
 
